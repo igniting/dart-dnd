@@ -152,9 +152,10 @@ abstract class _EventManager {
    * element underneath.
    */
   EventTarget _getRealTarget(Point clientPosition, {EventTarget target}) {
-    // If no target was provided get it.
-    if (target == null) {
-      target = document.elementFromPoint(clientPosition.x, clientPosition.y);
+    target = document.elementFromPoint(clientPosition.x, clientPosition.y);
+
+    if(target != null && target.shadowRoot != null) {
+      target = target.shadowRoot.elementFromPoint(clientPosition.x, clientPosition.y);
     }
     
     // Test if target is the drag avatar.
@@ -164,6 +165,9 @@ abstract class _EventManager {
       // Target is the drag avatar, get element underneath. 
       drg.avatarHandler.avatar.style.visibility = 'hidden';
       target = document.elementFromPoint(clientPosition.x, clientPosition.y);
+      if(target != null && target.shadowRoot != null) {
+        target = target.shadowRoot.elementFromPoint(clientPosition.x, clientPosition.y);
+      }
       drg.avatarHandler.avatar.style.visibility = 'visible';
     }
     
